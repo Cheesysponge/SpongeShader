@@ -1,2 +1,8 @@
 #version 460
-void main
+
+in vec3 vaPosition;
+
+void main() {
+    gl_Position = vec4(vaPosition,1);
+
+}
