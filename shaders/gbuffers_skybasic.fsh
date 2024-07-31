@@ -15,10 +15,10 @@ float fogify(float x, float w) {
 
 vec3 calcSkyColor(vec3 pos) {
     vec3 newSkyColor = skyColor;
-    newSkyColor = vec3(0.1,0.06,0.06);
-    vec3 newFogColor = vec3(0.24,0.12,0.02);
+    newSkyColor = vec3(0.5,0.4,-0.3) + skyColor;
+    vec3 newFogColor = vec3(0.64,0,-0.2) + fogColor;
 	float upDot = dot(pos, gbufferModelView[1].xyz); //not much, what's up with you?
-	return mix(newSkyColor, newFogColor, fogify(max(upDot, 0.0), 0.25));
+	return mix(skyColor, fogColor, fogify(max(upDot, 0.0), 0.25));
 }
 
 vec3 screenToView(vec3 screenPos) {
