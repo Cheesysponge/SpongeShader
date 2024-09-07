@@ -12,13 +12,12 @@ in vec4 starData; //rgb = star color, a = flag for whether or not this pixel is 
 float fogify(float x, float w) {
 	return w / (x * x + w);
 }
-
+vec3 newSkyColor = vec3(0.5,0.4,-0.3) + skyColor;
+vec3 newFogColor = vec3(0.64,0,-0.2) + fogColor;
 vec3 calcSkyColor(vec3 pos) {
-    vec3 newSkyColor = skyColor;
-    newSkyColor = vec3(0.5,0.4,-0.3) + skyColor;
-    vec3 newFogColor = vec3(0.64,0,-0.2) + fogColor;
+    
 	float upDot = dot(pos, gbufferModelView[1].xyz); //not much, what's up with you?
-	return mix(skyColor, fogColor, fogify(max(upDot, 0.0), 0.25));
+	return mix(newSkyColor/1.5, newFogColor, fogify(max(upDot, 0.0), 0.25));
 }
 
 vec3 screenToView(vec3 screenPos) {
@@ -32,7 +31,7 @@ layout(location = 0) out vec4 color;
 
 void main() {
 	if (starData.a > 0.5) {
-		color = vec4(starData.rgb, 1.0);
+		color =  vec4(starData.rgb, 1.0) * vec4(newSkyColor+newFogColor,1);
 	} else {
 		vec3 pos = screenToView(vec3(gl_FragCoord.xy / vec2(viewWidth, viewHeight), 1.0));
 		color = vec4(calcSkyColor(normalize(pos)), 1.0);
